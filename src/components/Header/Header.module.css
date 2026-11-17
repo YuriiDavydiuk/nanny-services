@@ -1,0 +1,144 @@
+.header {
+  padding-block: 20px;
+  color: var(--color-surface);
+  background-color: var(--color-primary);
+}
+
+.home {
+  position: absolute;
+  z-index: 1;
+  inset: 32px 32px auto;
+  background: url('/icons/divider.svg') center bottom / 100% 1px no-repeat;
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-inline: 96px;
+}
+
+.logo {
+  flex-shrink: 0;
+  font-size: 2.4rem;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.02em;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-left: auto;
+}
+
+.link {
+  position: relative;
+  padding-block: 8px;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+}
+
+.active::after {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  content: '';
+  transform: translateX(-50%);
+}
+
+.home .active::after {
+  display: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 52px;
+}
+
+.actions button {
+  min-height: 48px;
+  padding: 13px 39px;
+  border: 1px solid var(--color-border);
+  border-radius: 30px;
+  color: inherit;
+  background-color: transparent;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.actions .registration {
+  padding-inline: 40px;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+}
+
+.header:not(.home) .registration {
+  border-color: var(--color-border);
+}
+
+@media (max-width: 1199px) {
+  .inner {
+    gap: 24px;
+    margin-inline: 32px;
+  }
+
+  .navigation {
+    gap: 24px;
+  }
+
+  .actions {
+    margin-left: 0;
+  }
+
+  .actions button {
+    padding-inline: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .home {
+    inset: 16px 16px auto;
+  }
+
+  .inner {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    margin-inline: 16px;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  .navigation {
+    gap: 16px;
+    margin-left: 0;
+    font-size: 1.4rem;
+  }
+
+  .actions {
+    justify-content: center;
+    flex-basis: 100%;
+  }
+
+  .actions button {
+    min-height: 44px;
+    padding: 11px 24px;
+    font-size: 1.4rem;
+  }
+}

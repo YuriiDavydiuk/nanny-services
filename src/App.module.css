@@ -1,0 +1,23 @@
+.app {
+  position: relative;
+  min-height: 100dvh;
+}
+
+.placeholder {
+  width: calc(100% - 48px);
+  max-width: 1184px;
+  margin-inline: auto;
+  padding-block: 64px;
+}
+
+.placeholder h1 {
+  margin-bottom: 16px;
+  font-size: clamp(3.2rem, 5vw, 4.8rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.placeholder p {
+  max-width: 560px;
+  color: var(--color-muted);
+}
