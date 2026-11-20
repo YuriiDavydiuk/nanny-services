@@ -1,8 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { type InferType, object, string } from 'yup';
 
+import { auth } from '../../services/firebase';
 import css from '../../styles/auth-form.module.css';
 
 const loginSchema = object({
@@ -14,7 +16,11 @@ const loginSchema = object({
 
 type LoginValues = InferType<typeof loginSchema>;
 
-export default function LoginForm() {
+interface LoginFormProps {
+  onSuccess: () => void;
+}
+
+export default function LoginForm({ onSuccess }: LoginFormProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const {
     register,
@@ -26,8 +32,15 @@ export default function LoginForm() {
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = () => {
-    setError('root', { message: 'Sign-in is not available yet. Please try again later.' });
+  const onSubmit = async ({ email, password }: LoginValues) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      onSuccess();
+    } catch {
+      setError('root', {
+        message: 'Could not log in. Check your email and password.',
+      });
+    }
   };
 
   return (
