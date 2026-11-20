@@ -1,8 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { type InferType, object, string } from 'yup';
 
+import { AuthContext } from '../../context/AuthContext';
+import { auth } from '../../services/firebase';
 import css from '../../styles/auth-form.module.css';
 
 const registrationSchema = object({
@@ -15,7 +18,12 @@ const registrationSchema = object({
 
 type RegistrationValues = InferType<typeof registrationSchema>;
 
-export default function RegistrationForm() {
+interface RegistrationFormProps {
+  onSuccess: () => void;
+}
+
+export default function RegistrationForm({ onSuccess }: RegistrationFormProps) {
+  const { setUser } = useContext(AuthContext);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const {
     register,
@@ -27,8 +35,31 @@ export default function RegistrationForm() {
     defaultValues: { name: '', email: '', password: '' },
   });
 
-  const onSubmit = () => {
-    setError('root', { message: 'Registration is not available yet. Please try again later.' });
+  const onSubmit = async ({ name, email, password }: RegistrationValues) => {
+    let accountCreated = false;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      accountCreated = true;
+
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
+      setUser({
+        uid: userCredential.user.uid,
+        email: userCredential.user.email,
+        displayName: userCredential.user.displayName,
+      });
+
+      onSuccess();
+    } catch {
+      setError('root', {
+        message: accountCreated
+          ? 'Your account was created, but your name could not be saved.'
+          : 'Could not create an account. Please try again.',
+      });
+    }
   };
 
   return (
